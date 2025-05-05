@@ -1,0 +1,174 @@
+{{ template "base" . }}
+    <link href="/static/css/select_analysis.css" rel="stylesheet">
+    <link href="/static/css/visualization.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+{{ template "header" . }}
+<div class="container">
+  <br><h2>Выберите параметры анализа для файла</h2>
+
+  <form id="analysisForm">
+    <div class="row">
+      <!-- Демография -->
+      <div class="col-md-6 mb-4">
+        <div class="analysis-option card p-3">
+          <h4 class="mb-3">📊 Демография клиентов</h4>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="demografi[]" value="gender_dist" id="gender">
+            <label class="form-check-label" for="gender">
+              Распределение по полу (М/Ж)
+            </label>
+          </div>
+
+          <div class="geo-section">
+            <h6 class="mt-3">Возрастные группы:</h6>
+            <div class="ms-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="demografi[]" value="18-25" id="age18">
+                <label class="form-check-label" for="age18">18-25 лет</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="demografi[]" value="26-35" id="age26">
+                <label class="form-check-label" for="age26">26-35 лет</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="demografi[]" value="36-45" id="age36">
+                <label class="form-check-label" for="age36">36-45 лет</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="demografi[]" value="46+" id="age46">
+                <label class="form-check-label" for="age46">46+ лет</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- География клиентов -->
+          <div class="geo-section">
+            <h6 class="mt-3">География клиентов:</h6>
+            <div class="ms-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="demografi[]" value="top5" id="top5">
+                <label class="form-check-label" for="top5">Топ-5 регионов</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="demografi[]" value="top10" id="top10">
+                <label class="form-check-label" for="top10">Топ-10 регионов</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Финансы -->
+      <div class="col-md-6 mb-4">
+        <div class="analysis-option card p-3">
+          <h4 class="mb-3">💰 Финансовые метрики</h4>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="finances[]" value="income_stats" id="income">
+            <label class="form-check-label" for="income">
+              Статистика доходов (среднее, медиана)
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="finances[]" value="spending_stats" id="spending">
+            <label class="form-check-label" for="spending">
+              Статистика расходов (среднее, мода)
+            </label>
+          </div>
+
+          <div class="rfm-section">
+            <h6 class="mt-3">Сегментация по RFM:</h6>
+            <div class="ms-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="finances[]" value="3" id="rfm3">
+                <label class="form-check-label" for="rfm3">3 сегмента</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="finances[]" value="5" id="rfm5">
+                <label class="form-check-label" for="rfm5">5 сегментов</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Поведенческий анализ -->
+      <div class="col-md-6 mb-4">
+        <div class="analysis-option card p-3">
+          <h4 class="mb-3">📈 Поведенческий анализ</h4>
+
+          <!-- Частота покупок -->
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="behavioral_analysis[]" value="veterans" id="veteran">
+            <label class="form-check-label" for="veteran">
+              "Ветераны" (клиенты с регистрацией до 2023 года)
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="behavioral_analysis[]" value="newbies" id="newbie">
+            <label class="form-check-label" for="newbie">
+              "Новички" (регистрация в 2025 году)
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="behavioral_analysis[]" value="vips" id="vip">
+            <label class="form-check-label" for="vip">
+              VIP-клиенты (средний чек выше 75-го перцентиля)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Визуализация -->
+      <div class="col-md-6 mb-4">
+        <div class="analysis-option card p-3">
+          <h4 class="mb-3">📉 Визуальное представление</h4>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="visualization[]" value="gender_pie" id="pie">
+            <label class="form-check-label" for="pie">
+              Круговая диаграмма по полу
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="visualization[]" value="age_histogram" id="histogram">
+            <label class="form-check-label" for="histogram">
+              Гистограмма возрастных групп
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="visualization[]" value="income_vs_spending" id="scatter">
+            <label class="form-check-label" for="scatter">
+              График: Доход vs Расходы
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-4" id="submitBtn">
+      🚀 Запустить анализ
+    </button>
+
+
+  </form>
+
+  <div id="results" class="mt-4"></div>
+
+  <button class="btn btn-primary mt-4" id="reportBtn" style="display: none">
+    📥 Скачать отчет (PDF)
+  </button>
+</div>
+
+<script src="/static/js/analysis.js"></script>
+<script src="/static/js/visualization.js"></script>
+<script src="/static/js/report.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ template "footer" . }}

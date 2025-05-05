@@ -1,0 +1,55 @@
+{{ template "base" . }}
+{{ template "header" . }}
+<div class="container">
+  <div class="upload-container">
+    <h2 class="mb-4">Анализ клиентской базы</h2>
+    <p class="text-muted mb-4">
+      Загрузите CSV/Excel файл с данными клиентов для анализа
+    </p>
+
+    <form id="uploadForm" onsubmit="handleUpload(event)">
+      <div class="mb-3">
+        <input
+                type="file"
+                name="file"
+                id="fileInput"
+                class="form-control"
+                accept=".csv,.xlsx,.xls"
+                required
+        >
+      </div>
+
+      <div id="file-info" class="text-start mb-3">
+        <small>
+          Выбранный файл: <span id="fileName" class="text-primary">нет</span><br>
+          Размер: <span id="fileSize" class="text-primary">0 MB</span>
+        </small>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg">
+        <i class="bi bi-upload"></i> Загрузить файл
+      </button>
+
+      <div id="progress-bar" class="progress mt-3">
+        <div class="progress-bar progress-bar-striped progress-bar-animated"
+             role="progressbar"
+             style="width: 100%">
+        </div>
+      </div>
+    </form>
+
+    <div id="upload-result" class="mt-4"></div>
+
+    <div class="mt-5 text-start">
+      <h5>Требования к файлу:</h5>
+      <ul>
+        <li>Форматы: CSV, XLSX, XLS</li>
+        <li>Максимальный размер: 50 MB</li>
+        <li>Обязательные поля: ID, Email, Дата регистрации</li>
+      </ul>
+    </div>
+  </div>
+  <script src="/static/js/upload_file.js"></script>
+</div>
+
+{{ template "footer" . }}

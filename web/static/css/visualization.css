@@ -1,0 +1,49 @@
+/* В ваш файл стилей */
+.results-card {
+    transition: transform 0.2s;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.results-card:hover {
+    transform: translateY(-5px);
+}
+
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+}
+
+.badge {
+    font-size: 0.9em;
+    padding: 0.5em 0.75em;
+}
+
+.chart-container-cycle {
+    width: 500px;
+    height: 500px;
+    margin: 10px;
+    display: inline-block;
+}
+
+.chart-container-histogram {
+    width: 750px;
+    height: 500px;
+    margin: 10px;
+    display: inline-block;
+}
+
+#mapContainer {
+    height: 300px;
+    margin: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+    }
+}
