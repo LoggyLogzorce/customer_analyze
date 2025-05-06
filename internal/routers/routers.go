@@ -23,7 +23,7 @@ func SetupRouter() *gin.Engine {
 	{
 		apiGroup.POST("/upload-file", api.UploadFile)
 		apiGroup.POST("/analyze", api.AnalyzeHandler)
-		apiGroup.POST("/generate-report", api.GeneratePDF)
+		apiGroup.POST("/generate-report", api.GenerateReport)
 	}
 
 	return r
