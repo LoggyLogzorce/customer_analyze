@@ -4,6 +4,8 @@ import (
 	"encoding/csv"
 	"first_static_analiz/internal/model"
 	"fmt"
+	"github.com/extrame/xls"
+	"github.com/xuri/excelize/v2"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,8 +20,10 @@ func readCustomerFile(path string) ([]model.Customer, error) {
 	switch ext {
 	case ".csv":
 		return readCSV(path)
-	//case ".xlsx", ".xls":
-	//	return readExcel(path)
+	case ".xlsx":
+		return readXLSX(path)
+	case ".xls":
+		return readXLS(path)
 	default:
 		return nil, fmt.Errorf("unsupported file format: %s", ext)
 	}
@@ -39,8 +43,53 @@ func readCSV(path string) ([]model.Customer, error) {
 		return nil, err
 	}
 
+	return parseFileRows(records)
+}
+
+func readXLSX(path string) ([]model.Customer, error) {
+	f, err := excelize.OpenFile(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	// Получаем первый лист
+	sheet := f.GetSheetName(0)
+	rows, err := f.GetRows(sheet)
+	if err != nil {
+		return nil, err
+	}
+
+	return parseFileRows(rows)
+}
+
+func readXLS(path string) ([]model.Customer, error) {
+	xlFile, err := xls.Open(path, "utf-8")
+	if err != nil {
+		return nil, err
+	}
+
+	sheet := xlFile.GetSheet(0)
+	if sheet == nil {
+		return nil, fmt.Errorf("empty sheet")
+	}
+
+	var rows [][]string
+	for i := 0; i <= int(sheet.MaxRow); i++ {
+		row := sheet.Row(i)
+		var cells []string
+		for j := 0; j < 7; j++ { // Ожидаем 7 колонок
+			cells = append(cells, row.Col(j))
+		}
+		rows = append(rows, cells)
+	}
+
+	return parseFileRows(rows)
+}
+
+func parseFileRows(rows [][]string) ([]model.Customer, error) {
 	var customers []model.Customer
-	for i, record := range records {
+	for i, record := range rows {
 		if i == 0 { // Пропускаем заголовок
 			continue
 		}
