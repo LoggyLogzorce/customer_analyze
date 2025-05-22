@@ -20,6 +20,13 @@
             </label>
           </div>
 
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="demografi[]" value="purchase_frequency" id="purchase_frequency">
+            <label class="form-check-label" for="purchase_frequency">
+              Кто чаще покупает?
+            </label>
+          </div>
+
           <div class="geo-section">
             <h6 class="mt-3">Возрастные группы:</h6>
             <div class="ms-4">
@@ -67,29 +74,15 @@
           <div class="form-check">
             <input class="form-check-input" type="checkbox" name="finances[]" value="income_stats" id="income">
             <label class="form-check-label" for="income">
-              Статистика доходов (среднее, медиана)
+              Средний доход
             </label>
           </div>
 
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="finances[]" value="spending_stats" id="spending">
-            <label class="form-check-label" for="spending">
-              Статистика расходов (среднее, мода)
+            <input class="form-check-input" type="checkbox" name="finances[]" value="median_stats" id="median">
+            <label class="form-check-label" for="median">
+              Медиана по среднему чеку
             </label>
-          </div>
-
-          <div class="rfm-section">
-            <h6 class="mt-3">Сегментация по RFM:</h6>
-            <div class="ms-4">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="finances[]" value="3" id="rfm3">
-                <label class="form-check-label" for="rfm3">3 сегмента</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="finances[]" value="5" id="rfm5">
-                <label class="form-check-label" for="rfm5">5 сегментов</label>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -145,7 +138,7 @@
           <div class="form-check">
             <input class="form-check-input" type="checkbox" name="visualization[]" value="income_vs_spending" id="scatter">
             <label class="form-check-label" for="scatter">
-              График: Доход vs Расходы
+              График распределения среднего чека
             </label>
           </div>
         </div>
@@ -155,8 +148,6 @@
     <button type="submit" class="btn btn-primary mt-4" id="submitBtn">
       🚀 Запустить анализ
     </button>
-
-
   </form>
 
   <div id="results" class="mt-4"></div>

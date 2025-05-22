@@ -1,7 +1,6 @@
 const resultsContainer = document.getElementById('results');
 let genderChart = null;
 let ageChart = null;
-let map = null;
 
 function displayResults(data) {
     resultsContainer.innerHTML = ''; // Очищаем предыдущие результаты
@@ -69,6 +68,29 @@ function displayResults(data) {
         }
 
         const card = createCard('📈 Поведенческий анализ', items);
+        resultsContainer.appendChild(card);
+    }
+
+    if (data.finances) {
+        let items = []
+        if (data.finances.avg_income) {
+            items += [
+                `<b>Средний доход:</b> ${data.finances.avg_income}`,
+            ];
+        }
+        if (data.finances.median) {
+            if (items.length > 0) {
+                items += [
+                    `<br><b>Медиана по среднему чеку:</b> ${data.finances.median}`,
+                ];
+            } else {
+                items += [
+                    `<b>Медиана по среднему чеку:</b> ${data.finances.median}`,
+                ];
+            }
+        }
+
+        const card = createCard('💰 Финансовые метрики', items);
         resultsContainer.appendChild(card);
     }
 

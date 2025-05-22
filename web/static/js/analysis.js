@@ -37,10 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: formData // Отправляем FormData напрямую
             });
 
-            if (!response.ok) {
-                throw new Error('Ошибка сервера');
-            }
             const data = await response.json()
+            if (!response.ok) {
+                throw new Error(data.error);
+            }
             localStorage.setItem('lastAnalysis', JSON.stringify(data))
             displayResults(data);
 

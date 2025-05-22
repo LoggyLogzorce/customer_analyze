@@ -26,16 +26,19 @@ func AnalyzeHandler(c *gin.Context) {
 		return
 	}
 
+	fmt.Println(req)
+
 	// 1. Чтение файла
 	filePath := filepath.Join("storage", "uploaded_files", req.Filename)
-	customers, err := readCustomerFile(filePath)
+	customers, code, err := readCustomerFile(filePath)
 	if err != nil {
-		c.JSON(500, gin.H{"error": fmt.Sprintf("failed to read file: %v", err)})
+		c.JSON(code, gin.H{"error": fmt.Sprintf("Ошибка чтения файла: %v", err)})
 		return
 	}
 
 	demResult := gin.H{}
 	behResult := gin.H{}
+	finResult := gin.H{}
 	vizResult := gin.H{}
 
 	// 2. Выполнение анализов
@@ -50,9 +53,14 @@ func AnalyzeHandler(c *gin.Context) {
 	} else {
 		behResult = nil
 	}
-	// [gender_pie, age_histogram] len=2 len
+
+	if len(req.Finances) > 0 {
+		finResult = analyze.FinanceAnalyze(customers, req.Finances)
+	} else {
+		finResult = nil
+	}
+
 	if len(req.Visualizations) > 0 {
-		//vizResult = analyze.DemografiAnalyze(customers, req.Visualizations)
 		for _, v := range req.Visualizations {
 			switch v {
 			case "gender_pie":
@@ -71,10 +79,6 @@ func AnalyzeHandler(c *gin.Context) {
 		vizResult = nil
 	}
 
-	//if len(req.Finances) > 0 {
-	//	fulResult = analyzeDemografi(customers, req.Demografi)
-	//}
-
 	result := gin.H{
 		"filename": req.Filename,
 		"status":   "analyzed",
@@ -88,9 +92,15 @@ func AnalyzeHandler(c *gin.Context) {
 		result["behavioral_analysis"] = behResult
 	}
 
+	if finResult != nil {
+		result["finances"] = finResult
+	}
+
 	if vizResult != nil {
 		result["visualizations"] = vizResult
 	}
+
+	fmt.Println("Result:", result)
 
 	c.JSON(http.StatusOK, result)
 }

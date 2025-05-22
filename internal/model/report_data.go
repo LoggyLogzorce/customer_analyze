@@ -28,21 +28,10 @@ type ReportData struct {
 		} `json:"vips"`
 	} `json:"behavioral"`
 
-	//Financials struct {
-	//	Income struct {
-	//		Mean   float64 `json:"mean"`
-	//		Median float64 `json:"median"`
-	//		Mode   float64 `json:"mode"`
-	//		StdDev float64 `json:"std_dev"`
-	//	} `json:"income"`
-	//	Spending struct {
-	//		Mean   float64 `json:"mean"`
-	//		Median float64 `json:"median"`
-	//		Mode   float64 `json:"mode"`
-	//		StdDev float64 `json:"std_dev"`
-	//	} `json:"spending"`
-	//	CheckSizeDistribution map[string]int `json:"check_size_distribution"`
-	//} `json:"financials"`
+	Finances struct {
+		AvgOrder float64 `json:"avg_order"`
+		Median   float64 `json:"median"`
+	} `json:"finances"`
 
 	Visualizations struct {
 		GenderPie    string `json:"gender_pie"`    // Base64 encoded PNG

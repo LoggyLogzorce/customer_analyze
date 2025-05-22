@@ -14,7 +14,7 @@ import (
 )
 
 // Чтение файла (CSV/Excel)
-func readCustomerFile(path string) ([]model.Customer, error) {
+func readCustomerFile(path string) ([]model.Customer, int, error) {
 	ext := filepath.Ext(path)
 
 	switch ext {
@@ -25,31 +25,30 @@ func readCustomerFile(path string) ([]model.Customer, error) {
 	case ".xls":
 		return readXLS(path)
 	default:
-		return nil, fmt.Errorf("unsupported file format: %s", ext)
+		return nil, 400, fmt.Errorf("unsupported file format: %s", ext)
 	}
 }
 
-// Пример обработки CSV
-func readCSV(path string) ([]model.Customer, error) {
+func readCSV(path string) ([]model.Customer, int, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, 500, fmt.Errorf("ошибка открытия файла %v", err)
 	}
 	defer file.Close()
 
 	r := csv.NewReader(file)
 	records, err := r.ReadAll()
 	if err != nil {
-		return nil, err
+		return nil, 500, fmt.Errorf("ошибка чтения %v", err)
 	}
 
 	return parseFileRows(records)
 }
 
-func readXLSX(path string) ([]model.Customer, error) {
+func readXLSX(path string) ([]model.Customer, int, error) {
 	f, err := excelize.OpenFile(path)
 	if err != nil {
-		return nil, err
+		return nil, 500, fmt.Errorf("ошибка открытия файла %v", err)
 	}
 	defer f.Close()
 
@@ -57,21 +56,21 @@ func readXLSX(path string) ([]model.Customer, error) {
 	sheet := f.GetSheetName(0)
 	rows, err := f.GetRows(sheet)
 	if err != nil {
-		return nil, err
+		return nil, 500, fmt.Errorf("ошибка считывания первого листа %v", err)
 	}
 
 	return parseFileRows(rows)
 }
 
-func readXLS(path string) ([]model.Customer, error) {
+func readXLS(path string) ([]model.Customer, int, error) {
 	xlFile, err := xls.Open(path, "utf-8")
 	if err != nil {
-		return nil, err
+		return nil, 500, fmt.Errorf("ошибка открытия файла %v", err)
 	}
 
 	sheet := xlFile.GetSheet(0)
 	if sheet == nil {
-		return nil, fmt.Errorf("empty sheet")
+		return nil, 400, fmt.Errorf("empty sheet")
 	}
 
 	var rows [][]string
@@ -87,7 +86,7 @@ func readXLS(path string) ([]model.Customer, error) {
 	return parseFileRows(rows)
 }
 
-func parseFileRows(rows [][]string) ([]model.Customer, error) {
+func parseFileRows(rows [][]string) ([]model.Customer, int, error) {
 	var customers []model.Customer
 	for i, record := range rows {
 		if i == 0 { // Пропускаем заголовок
@@ -95,7 +94,7 @@ func parseFileRows(rows [][]string) ([]model.Customer, error) {
 		}
 
 		if len(record) != 7 {
-			return nil, fmt.Errorf("invalid record length in line %d", i+1)
+			return nil, 400, fmt.Errorf("ошибка в строении файла, строка №%d", i+1)
 		}
 
 		customer := model.Customer{}
@@ -124,5 +123,5 @@ func parseFileRows(rows [][]string) ([]model.Customer, error) {
 		customers = append(customers, customer)
 	}
 
-	return customers, nil
+	return customers, 200, nil
 }

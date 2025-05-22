@@ -40,22 +40,16 @@ document.getElementById("reportBtn").addEventListener('click', async (e) => {
             }
         },
 
-        // financials: {
-        //     income: analysisData?.financials?.income || {},
-        //     spending: analysisData?.financials?.spending || {},
-        //     check_size_distribution: analysisData?.financials?.check_size_distribution || {}
-        // },
+        finances: {
+            avg_order: analysisData?.finances?.avg_income || {},
+            median: analysisData?.finances?.median || {},
+        },
 
         visualizations: {
             gender_pie: charts.gender_pie,
             age_histogram: charts.age_histogram,
         },
 
-        // additional: {
-        //     notes: document.getElementById('reportNotes')?.value || '',
-        //     analyst_name: document.getElementById('analystName')?.value || 'Анонимный аналитик',
-        //     segments: getSelectedSegments() // Ваша функция для получения сегментов
-        // }
     };
 
     try {

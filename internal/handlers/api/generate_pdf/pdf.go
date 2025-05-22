@@ -132,6 +132,27 @@ func GeneratePDF(reportData model.ReportData) (bytes.Buffer, error) {
 		yPos += 5
 	}
 
+	if reportData.Finances.AvgOrder != 0 || reportData.Finances.Median != 0 {
+		pdf.SetFont("dejavu", "", 16)
+		pdf.SetY(yPos)
+		pdf.Cell(40, 10, "Финансовые метрики")
+		yPos += 10
+
+		pdf.SetFont("dejavu", "", 12)
+		if reportData.Finances.AvgOrder != 0 {
+			pdf.SetY(yPos)
+			pdf.Cell(40, 10, fmt.Sprintf("Средний доход: %f", reportData.Finances.AvgOrder))
+			yPos += 7
+		}
+
+		if reportData.Finances.Median != 0 {
+			pdf.SetY(yPos)
+			pdf.Cell(40, 10, fmt.Sprintf("Медиана по среднему чеку: %f", reportData.Finances.Median))
+			yPos += 7
+		}
+		yPos += 5
+	}
+
 	// Изображения
 	if reportData.Visualizations.GenderPie != "" {
 		yPos = checkPageBreak(pdf, yPos, 60)
